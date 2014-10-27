@@ -1,4 +1,4 @@
-package edu.java.gui;
+package edu.java.gui.paths;
 
 import java.awt.geom.Path2D;
 
