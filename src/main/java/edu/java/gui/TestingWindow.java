@@ -79,28 +79,29 @@ public final class TestingWindow extends WindowAdapter implements KeyListener {
     public static void printPath2DInfo(Path2D path) {
         PathIterator iterator = path.getPathIterator(null);
         if (iterator != null) {
+            int i = 1;
             float[] coords = new float[6];
-            System.out.printf("Dumping instance of %s:\n", path.getClass().getName());
+            System.out.printf("# Dumping instance of %s:\n", path.getClass().getName());
             while (!iterator.isDone()) {
                 switch (iterator.currentSegment(coords)) {
                     case PathIterator.SEG_CLOSE:
-                        System.out.println("+ CLOSE...");
+                        System.out.printf("  %02d. CLOSE...\n", i);
                         break;
                     case PathIterator.SEG_MOVETO:
                         System.out.printf(
-                            "+ MOVETO: (%.2f, %.2f)\n",
+                            "  %02d. MOVETO: (%.2f, %.2f)\n", i,
                             coords[0], coords[1]
                         );
                         break;
                     case PathIterator.SEG_LINETO:
                         System.out.printf(
-                            "+ LINETO: (%.2f, %.2f)\n",
+                            "  %02d. LINETO: (%.2f, %.2f)\n", i,
                             coords[0], coords[1]
                         );
                         break;
                     case PathIterator.SEG_CUBICTO:
                         System.out.printf(
-                            "+ CUBICTO: (%.2f, %.2f), (%.2f, %.2f), (%.2f, %.2f)\n",
+                            "  %02d. CUBICTO: (%.2f, %.2f), (%.2f, %.2f), (%.2f, %.2f)\n", i,
                             coords[0], coords[1],
                             coords[2], coords[3],
                             coords[4], coords[5]
@@ -108,16 +109,17 @@ public final class TestingWindow extends WindowAdapter implements KeyListener {
                         break;
                     case PathIterator.SEG_QUADTO:
                         System.out.printf(
-                            "+ QUADTO: (%.2f, %.2f), (%.2f, %.2f)\n",
+                            "  %02d. QUADTO: (%.2f, %.2f), (%.2f, %.2f)\n", i,
                             coords[0], coords[1],
                             coords[2], coords[3]
                         );
                         break;
                     default:
-                        System.out.println("+ UNKNOWN SEGMENT...");
+                        System.out.printf("  %02d. UNKNOWN SEGMENT...\n", i);
                         break;
                 }
                 iterator.next();
+                ++i;
             }
         }
     }
