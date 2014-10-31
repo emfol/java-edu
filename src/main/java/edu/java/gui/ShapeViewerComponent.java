@@ -9,23 +9,23 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Path2D;
 
-public class PathViewerComponent extends Component {
+public class ShapeViewerComponent extends Component {
 
     public static final int MODE_STRETCHED = 0;
     public static final int MODE_CENTRALIZED = 1;
 
-    private final Path2D path;
+    private Shape shape;
     private volatile int mode;
     private double width;
     private double height;
 
-    public PathViewerComponent(Path2D path) {
+    public ShapeViewerComponent(Shape shape) {
         super();
-        this.path = path;
+        this.shape = shape;
         this.mode = MODE_STRETCHED;
     }
 
-    public PathViewerComponent() {
+    public ShapeViewerComponent() {
         this(null);
     }
 
@@ -35,8 +35,7 @@ public class PathViewerComponent extends Component {
 
     private void drawStretched(Graphics2D g) {
 
-        Path2D pathClone = (Path2D)this.path.clone();
-        Rectangle2D pathBounds = pathClone.getBounds2D();
+        Rectangle2D shapeBounds = this.shape.getBounds2D();
         AffineTransform matrix = new AffineTransform();
         double frameWidth = this.width * 0.75, frameHeight = this.height * 0.75;
 
@@ -45,41 +44,38 @@ public class PathViewerComponent extends Component {
             (this.height - frameHeight) * 0.5
         );
         matrix.scale(
-            frameWidth / pathBounds.getWidth(),
-            frameHeight / pathBounds.getHeight()
+            frameWidth / shapeBounds.getWidth(),
+            frameHeight / shapeBounds.getHeight()
         );
-        pathClone.transform(matrix);
 
-        g.fill(pathClone);
+        g.fill(matrix.createTransformedShape(this.shape));
 
     }
 
     private void drawCentralized(Graphics2D g) {
 
-        Path2D pathClone = (Path2D)this.path.clone();
-        Rectangle2D pathBounds = pathClone.getBounds2D();
+        Rectangle2D shapeBounds = this.shape.getBounds2D();
         AffineTransform matrix = new AffineTransform();
-        double scale, pathWidth, pathHeight, frameWidth, frameHeight;
+        double scale, shapeWidth, shapeHeight, frameWidth, frameHeight;
 
         frameWidth = this.width * 0.75;
         frameHeight = this.height * 0.75;
-        pathWidth = pathBounds.getWidth();
-        pathHeight = pathBounds.getHeight();
+        shapeWidth = shapeBounds.getWidth();
+        shapeHeight = shapeBounds.getHeight();
 
-        if (pathHeight / pathWidth < frameHeight / frameWidth) {
-            scale = frameWidth / pathWidth;
+        if (shapeHeight / shapeWidth < frameHeight / frameWidth) {
+            scale = frameWidth / shapeWidth;
         } else {
-            scale = frameHeight / pathHeight;
+            scale = frameHeight / shapeHeight;
         }
 
         matrix.translate(
-            (this.width - (pathWidth * scale)) * 0.5,
-            (this.height - (pathHeight * scale)) * 0.5
+            (this.width - (shapeWidth * scale)) * 0.5,
+            (this.height - (shapeHeight * scale)) * 0.5
         );
         matrix.scale(scale, scale);
-        pathClone.transform(matrix);
 
-        g.fill(pathClone);
+        g.fill(matrix.createTransformedShape(this.shape));
 
     }
 
@@ -98,7 +94,7 @@ public class PathViewerComponent extends Component {
         Graphics2D g2;
         int mode, width, height;
 
-        if (this.path != null) {
+        if (this.shape != null) {
             width = this.getWidth();
             height = this.getHeight();
             if (width > 0 && height > 0) {

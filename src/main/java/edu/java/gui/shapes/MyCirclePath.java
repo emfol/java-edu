@@ -1,4 +1,4 @@
-package edu.java.gui.paths;
+package edu.java.gui.shapes;
 
 import java.awt.geom.Path2D;
 import java.awt.geom.Ellipse2D;
