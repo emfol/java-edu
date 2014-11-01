@@ -14,7 +14,7 @@ public abstract class BasicShape extends Object implements Shape {
 
     public BasicShape() {
         super();
-        this.path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        this.path = new GeneralPath();
     }
 
     protected final GeneralPath getShapePath() {

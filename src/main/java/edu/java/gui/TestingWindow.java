@@ -1,12 +1,7 @@
 package edu.java.gui;
 
-import java.lang.String;
-import java.lang.Class;
-import java.lang.System;
-import java.lang.Exception;
-import java.lang.ClassNotFoundException;
-
 import java.awt.Color;
+import java.awt.Shape;
 import java.awt.Window;
 import java.awt.Frame;
 import java.awt.BorderLayout;
@@ -14,17 +9,15 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import java.awt.geom.PathIterator;
-import java.awt.geom.Path2D;
 
 public final class TestingWindow extends WindowAdapter implements KeyListener {
 
-    private PathViewerComponent pathViewer;
+    private ShapeViewerComponent shapeViewer;
 
     public TestingWindow() {
         super();
-        this.pathViewer = null;
+        this.shapeViewer = null;
     }
 
     // WindowAdapter overrides
@@ -43,13 +36,13 @@ public final class TestingWindow extends WindowAdapter implements KeyListener {
     }
 
     public void keyReleased(KeyEvent e) {
-        if (this.pathViewer != null) {
+        if (this.shapeViewer != null) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_S:
-                    this.pathViewer.setViewMode(PathViewerComponent.MODE_STRETCHED);
+                    this.shapeViewer.setViewMode(ShapeViewerComponent.MODE_STRETCHED);
                     break;
                 case KeyEvent.VK_C:
-                    this.pathViewer.setViewMode(PathViewerComponent.MODE_CENTRALIZED);
+                    this.shapeViewer.setViewMode(ShapeViewerComponent.MODE_CENTRALIZED);
                     break;
             }
         }
@@ -59,29 +52,29 @@ public final class TestingWindow extends WindowAdapter implements KeyListener {
         // nope...
     }
 
-    public void start(Path2D path) {
+    public void start(Shape shape) {
 
         Frame frame;
 
-        this.pathViewer = new PathViewerComponent(path);
-        this.pathViewer.setBackground(Color.BLACK);
-        this.pathViewer.setForeground(Color.GREEN);
+        this.shapeViewer = new ShapeViewerComponent(shape);
+        this.shapeViewer.setBackground(Color.BLACK);
+        this.shapeViewer.setForeground(Color.GREEN);
 
         frame = new Frame("Testing Window");
         frame.addWindowListener(this);
         frame.addKeyListener(this);
-        frame.add(this.pathViewer, BorderLayout.CENTER);
+        frame.add(this.shapeViewer, BorderLayout.CENTER);
         frame.setBounds(10, 10, 480, 320);
         frame.setVisible(true);
 
     }
 
-    public static void printPath2DInfo(Path2D path) {
-        PathIterator iterator = path.getPathIterator(null);
+    public static void printShapeInfo(Shape shape) {
+        PathIterator iterator = shape.getPathIterator(null);
         if (iterator != null) {
             int i = 1;
             float[] coords = new float[6];
-            System.out.printf("# Dumping instance of %s:\n", path.getClass().getName());
+            System.out.printf("# Dumping instance of %s:\n", shape.getClass().getName());
             while (!iterator.isDone()) {
                 switch (iterator.currentSegment(coords)) {
                     case PathIterator.SEG_CLOSE:
@@ -128,21 +121,21 @@ public final class TestingWindow extends WindowAdapter implements KeyListener {
 
         TestingWindow app;
         Class cls;
-        Path2D path;
+        Shape shape;
 
         if (args.length > 0) {
             try {
                 cls = Class.forName(args[0]);
-                if (Path2D.class.isAssignableFrom(cls)) {
-                    path = (Path2D)cls.newInstance();
-                    printPath2DInfo(path);
+                if (Shape.class.isAssignableFrom(cls)) {
+                    shape = (Shape)cls.newInstance();
+                    printShapeInfo(shape);
                     app = new TestingWindow();
-                    app.start(path);
+                    app.start(shape);
                 } else {
                     System.out.printf(
                         "%s is not a %s subclass...\n",
                         cls.getName(),
-                        Path2D.class.getName()
+                        Shape.class.getName()
                     );
                 }
             } catch (ClassNotFoundException e) {
@@ -151,7 +144,7 @@ public final class TestingWindow extends WindowAdapter implements KeyListener {
                 System.out.println("Unexpected exception...");
             }
         } else {
-            System.out.println("Path2D argument expected...");
+            System.out.println("Shape argument expected...");
         }
 
     }

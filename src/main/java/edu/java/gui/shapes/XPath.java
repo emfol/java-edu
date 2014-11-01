@@ -1,28 +1,30 @@
 package edu.java.gui.shapes;
 
-import java.awt.geom.Path2D;
+import java.awt.geom.GeneralPath;
 
-public final class XPath extends Path2D.Float {
+public final class XPath extends BasicShape {
 
     public XPath() {
-        super(Path2D.WIND_EVEN_ODD, 14);
+        super();
         this.build();
     }
 
     private void build() {
-        this.moveTo(0.0f, 1.0f);
-        this.lineTo(1.0f, 0.0f);
-        this.lineTo(2.0f, 1.0f);
-        this.lineTo(3.0f, 0.0f);
-        this.lineTo(4.0f, 1.0f);
-        this.lineTo(3.0f, 2.0f);
-        this.lineTo(4.0f, 3.0f);
-        this.lineTo(3.0f, 4.0f);
-        this.lineTo(2.0f, 3.0f);
-        this.lineTo(1.0f, 4.0f);
-        this.lineTo(0.0f, 3.0f);
-        this.lineTo(1.0f, 2.0f);
-        this.closePath();
+        GeneralPath path = this.getShapePath();
+        path.setWindingRule(GeneralPath.WIND_EVEN_ODD);
+        path.moveTo(0.0f, 1.0f);
+        path.lineTo(1.0f, 0.0f);
+        path.lineTo(2.0f, 1.0f);
+        path.lineTo(3.0f, 0.0f);
+        path.lineTo(4.0f, 1.0f);
+        path.lineTo(3.0f, 2.0f);
+        path.lineTo(4.0f, 3.0f);
+        path.lineTo(3.0f, 4.0f);
+        path.lineTo(2.0f, 3.0f);
+        path.lineTo(1.0f, 4.0f);
+        path.lineTo(0.0f, 3.0f);
+        path.lineTo(1.0f, 2.0f);
+        path.closePath();
     }
 
 }
