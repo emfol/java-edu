@@ -12,7 +12,7 @@ public abstract class BasicShape extends Object implements Shape {
 
     private final GeneralPath path;
 
-    public BasicShape() {
+    protected BasicShape() {
         super();
         this.path = new GeneralPath();
     }
